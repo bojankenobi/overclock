@@ -5777,11 +5777,23 @@ export default function App() {
                   </div>
                   <button
                     type="button"
-                    onClick={() => setIsSolved(false)}
+                    onClick={() => {
+                      setIsSolved(false);
+                      if (level.mode === 'challenge') {
+                        const order: Array<'cpu' | 'mobo' | 'ram' | 'ssd' | 'gpu'> = ['cpu', 'mobo', 'ram', 'ssd', 'gpu'];
+                        const idx = order.indexOf(dailyChallengeModule);
+                        const nextComp = order[(idx + 1) % order.length] ?? 'cpu';
+                        setDailyChallengeModule(nextComp);
+                      } else if (!isStoryMode) {
+                        triggerNewRngGrid(true);
+                      }
+                    }}
                     className="w-full inline-flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg bg-slate-900/80 text-slate-300 border border-slate-800 hover:border-slate-600 hover:text-white text-xs font-medium transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/60"
                   >
                     <X className="w-3.5 h-3.5" />
-                    <span>Close &amp; Continue</span>
+                    <span>
+                      {level.mode === 'challenge' ? 'Next Challenge →' : 'Close & Continue'}
+                    </span>
                   </button>
                 </div>
               </motion.div>
