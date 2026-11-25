@@ -149,7 +149,15 @@ export const KERNEL_SECTORS: KernelSectorSpec[] = [
   },
 ];
 
-export type SignalThemeId = 'cyan' | 'gold' | 'crimson' | 'violet' | 'emerald';
+export type SignalThemeId =
+  | 'cyan'
+  | 'gold'
+  | 'crimson'
+  | 'violet'
+  | 'emerald'
+  | 'arctic'
+  | 'amber'
+  | 'plasma';
 
 export interface PlayerEconomy {
   cycles: number;

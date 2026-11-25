@@ -60,11 +60,35 @@ export const SIGNAL_THEMES: Record<SignalThemeId, ThemeSpec> = {
     secondary: '#34D399',
     glow: 'rgba(0, 255, 136, 0.55)',
   },
+  arctic: {
+    id: 'arctic',
+    name: 'Arctic Ice',
+    cost: 2000,
+    primary: '#7DD3FC',
+    secondary: '#E0F2FE',
+    glow: 'rgba(125, 211, 252, 0.55)',
+  },
+  amber: {
+    id: 'amber',
+    name: 'Neon Amber',
+    cost: 2600,
+    primary: '#FB923C',
+    secondary: '#FDBA74',
+    glow: 'rgba(251, 146, 60, 0.55)',
+  },
+  plasma: {
+    id: 'plasma',
+    name: 'Hyper Plasma',
+    cost: 3500,
+    primary: '#F472B6',
+    secondary: '#E879F9',
+    glow: 'rgba(244, 114, 182, 0.55)',
+  },
 };
 
-export const HINT_PACK_COST = 120;
-export const STREAK_SHIELD_COST = 350;
-export const OVERCLOCK_CAP_COSTS = [400, 900, 1600] as const;
+export const HINT_PACK_COST = 150;
+export const STREAK_SHIELD_COST = 450;
+export const OVERCLOCK_CAP_COSTS = [450, 950, 1600, 2400, 3500] as const;
 
 export function computeRunRewards(params: {
   mode: GameMode;
@@ -77,51 +101,51 @@ export function computeRunRewards(params: {
 }): { cycles: number; power: number } {
   const tierBonus =
     params.tier === 'L5'
-      ? 200
+      ? 100
       : params.tier === 'L4'
-        ? 140
+        ? 70
         : params.tier === 'L3'
-          ? 90
+          ? 45
           : params.tier === 'L2'
-            ? 50
+            ? 25
             : params.tier === 'L1'
-              ? 20
+              ? 10
               : 0;
 
   if (params.mode === 'overclock') {
     const score = Math.max(0, Math.floor(params.overclockScore ?? 0));
     return {
-      cycles: Math.min(250, Math.max(15, Math.floor(score / 8))),
-      power: Math.min(300, Math.floor(score / 4)),
+      cycles: Math.min(140, Math.max(10, Math.floor(score / 14))),
+      power: Math.min(180, Math.floor(score / 7)),
     };
   }
 
   if (params.mode === 'blitz') {
-    const speedBonus = params.timeMs !== null && params.timeMs < 45000 ? 100 : 30;
+    const speedBonus = params.timeMs !== null && params.timeMs < 45000 ? 55 : 15;
     return {
-      cycles: 140 + speedBonus,
-      power: 180 + (params.timeMs !== null && params.timeMs < 45000 ? 120 : 40),
+      cycles: 75 + speedBonus,
+      power: 95 + (params.timeMs !== null && params.timeMs < 45000 ? 65 : 20),
     };
   }
 
   if (params.isRng) {
     return {
-      cycles: 45 + tierBonus + (params.hitPar ? 25 : 0),
-      power: 35 + Math.floor(tierBonus / 2) + (params.hitPar ? 25 : 0),
+      cycles: 25 + tierBonus + (params.hitPar ? 15 : 0),
+      power: 20 + Math.floor(tierBonus / 2) + (params.hitPar ? 15 : 0),
     };
   }
 
   if (params.mode === 'challenge') {
     return {
-      cycles: (params.firstTimeDaily ? 180 : 40) + (params.hitPar ? 80 : 0) + tierBonus,
-      power: (params.firstTimeDaily ? 240 : 25) + (params.hitPar ? 110 : 0) + tierBonus,
+      cycles: (params.firstTimeDaily ? 100 : 20) + (params.hitPar ? 45 : 0) + tierBonus,
+      power: (params.firstTimeDaily ? 130 : 15) + (params.hitPar ? 60 : 0) + tierBonus,
     };
   }
 
   // Standard Daily
   return {
-    cycles: (params.firstTimeDaily ? 100 : 25) + (params.hitPar ? 50 : 0) + tierBonus,
-    power: (params.firstTimeDaily ? 120 : 15) + (params.hitPar ? 80 : 0) + tierBonus,
+    cycles: (params.firstTimeDaily ? 60 : 15) + (params.hitPar ? 30 : 0) + tierBonus,
+    power: (params.firstTimeDaily ? 75 : 10) + (params.hitPar ? 45 : 0) + tierBonus,
   };
 }
 
