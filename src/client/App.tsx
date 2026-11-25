@@ -459,6 +459,14 @@ export default function App() {
   const [myPillars, setMyPillars] = useState<ComponentPillarScores>({});
   const [economy, setEconomy] = useState<PlayerEconomy>(DEFAULT_ECONOMY);
   const [username, setUsername] = useState<string | null>(null);
+  const [rigName, setRigName] = useState<string>(() => {
+    try {
+      return localStorage.getItem('overclock_rig_name') || 'RIG-01';
+    } catch {
+      return 'RIG-01';
+    }
+  });
+  const [editingRigName, setEditingRigName] = useState<boolean>(false);
   const [showArmory, setShowArmory] = useState<boolean>(false);
   const [showArena, setShowArena] = useState<boolean>(false);
   const [arenaTargetUser, setArenaTargetUser] = useState<string | null>(null);
@@ -4908,6 +4916,47 @@ export default function App() {
                         const lvl = getPlayerLevelInfo(economy.powerScore);
                         return (
                           <div className="px-3 py-2.5 bg-gradient-to-r from-[#0D1526] to-[#111C33] border-b border-slate-800/80 flex flex-col gap-1.5 font-mono">
+                            <div className="flex items-center justify-between text-[10px]">
+                              <span className="text-slate-400">SYSTEM RIG:</span>
+                              {editingRigName ? (
+                                <form
+                                  onSubmit={(e) => {
+                                    e.preventDefault();
+                                    const trimmed = rigName.trim().slice(0, 18) || 'RIG-01';
+                                    setRigName(trimmed);
+                                    try {
+                                      localStorage.setItem('overclock_rig_name', trimmed);
+                                    } catch {}
+                                    setEditingRigName(false);
+                                  }}
+                                  className="flex items-center gap-1"
+                                >
+                                  <input
+                                    type="text"
+                                    value={rigName}
+                                    maxLength={18}
+                                    onChange={(e) => setRigName(e.target.value)}
+                                    className="w-28 px-1.5 py-0.5 rounded bg-slate-900 border border-[#00F0FF]/50 text-[#00F0FF] text-[10px] outline-none"
+                                    autoFocus
+                                  />
+                                  <button
+                                    type="submit"
+                                    className="px-1.5 py-0.5 rounded bg-[#00F0FF]/20 text-[#00F0FF] hover:bg-[#00F0FF]/30 cursor-pointer"
+                                  >
+                                    Save
+                                  </button>
+                                </form>
+                              ) : (
+                                <button
+                                  type="button"
+                                  onClick={() => setEditingRigName(true)}
+                                  className="text-[#00F0FF] hover:underline cursor-pointer font-semibold"
+                                  title="Rename your PC / Grid"
+                                >
+                                  {rigName} ✎
+                                </button>
+                              )}
+                            </div>
                             <div className="flex items-center justify-between text-xs">
                               <span className="flex items-center gap-2">
                                 <span className="px-1.5 py-0.5 rounded bg-[#00F0FF]/15 border border-[#00F0FF]/40 text-[#00F0FF] font-bold text-[10px]">
@@ -5449,9 +5498,9 @@ export default function App() {
                         : level.mode === 'challenge'
                           ? `CHALLENGE #${level.dayNumber}`
                           : level.mode === 'overclock'
-                            ? `OVERCLOCK #${level.dayNumber}`
+                            ? `${rigName} · STABILIZED`
                             : level.mode === 'blitz'
-                              ? `BLITZ #${level.dayNumber}`
+                              ? `${rigName} · COOLED`
                               : `DAILY #${level.dayNumber}`}
                     </h2>
                     {level.mode === 'challenge' && (
