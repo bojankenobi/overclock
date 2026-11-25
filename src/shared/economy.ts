@@ -124,3 +124,49 @@ export function computeRunRewards(params: {
     power: (params.firstTimeDaily ? 120 : 15) + (params.hitPar ? 80 : 0) + tierBonus,
   };
 }
+
+export interface PlayerLevelInfo {
+  level: number;
+  title: string;
+  currentXp: number;
+  nextLevelXp: number;
+  progressPct: number;
+}
+
+const RANK_TITLES = [
+  'Circuit Novice',
+  'Signal Runner',
+  'Bus Technician',
+  'Core Engineer',
+  'Clock Tuner',
+  'Overclock Specialist',
+  'Silicon Architect',
+  'Quantum Master',
+] as const;
+
+/** Computes player level, rank title, and XP progress bar from cumulative powerScore. */
+export function getPlayerLevelInfo(powerScore: number): PlayerLevelInfo {
+  const safeScore = Math.max(0, Math.floor(powerScore));
+  let level = 1;
+  let threshold = 0;
+  let nextThreshold = 200;
+
+  while (safeScore >= nextThreshold) {
+    level += 1;
+    threshold = nextThreshold;
+    nextThreshold = threshold + 200 + (level - 1) * 120;
+  }
+
+  const span = Math.max(1, nextThreshold - threshold);
+  const currentXp = safeScore - threshold;
+  const progressPct = Math.min(100, Math.max(0, Math.round((currentXp / span) * 100)));
+  const titleIdx = Math.min(RANK_TITLES.length - 1, Math.floor((level - 1) / 2));
+
+  return {
+    level,
+    title: RANK_TITLES[titleIdx] ?? 'Quantum Master',
+    currentXp,
+    nextLevelXp: span,
+    progressPct,
+  };
+}

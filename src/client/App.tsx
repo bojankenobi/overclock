@@ -54,7 +54,7 @@ const SsdSequencerGame = lazy(() =>
 const GpuPhotonRaceGame = lazy(() =>
   import('./ComponentGames').then((m) => ({ default: m.GpuPhotonRaceGame }))
 );
-import { DEFAULT_ECONOMY, SIGNAL_THEMES } from '../shared/economy';
+import { DEFAULT_ECONOMY, getPlayerLevelInfo, SIGNAL_THEMES } from '../shared/economy';
 import {
   computeProjection,
   createEnergySurge,
@@ -4902,29 +4902,71 @@ export default function App() {
                         );
                       })()}
 
+                      {(() => {
+                        const lvl = getPlayerLevelInfo(economy.powerScore);
+                        return (
+                          <div className="px-3 py-2.5 bg-gradient-to-r from-[#0D1526] to-[#111C33] border-b border-slate-800/80 flex flex-col gap-1.5 font-mono">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="flex items-center gap-2">
+                                <span className="px-1.5 py-0.5 rounded bg-[#00F0FF]/15 border border-[#00F0FF]/40 text-[#00F0FF] font-bold text-[10px]">
+                                  LVL {lvl.level}
+                                </span>
+                                <span className="text-slate-100 font-semibold">{lvl.title}</span>
+                              </span>
+                              <span className="text-[10px] text-slate-400 tabular-nums">
+                                {lvl.currentXp} / {lvl.nextLevelXp} XP
+                              </span>
+                            </div>
+                            <div className="w-full h-1.5 rounded-full bg-slate-800/90 overflow-hidden">
+                              <div
+                                className="h-full rounded-full bg-gradient-to-r from-[#00F0FF] to-[#00FF88] transition-all duration-300"
+                                style={{ width: `${lvl.progressPct}%` }}
+                              />
+                            </div>
+                          </div>
+                        );
+                      })()}
+
                       {overallLeaderboard.length === 0 ? (
                         <p className="px-3 py-4 text-center text-[11px] text-slate-500">
                           Play MOBO, RAM, SSD, GPU &amp; CPU to build your 5-Pillar Architect Score!
                         </p>
                       ) : (
-                        <ul className="divide-y divide-slate-800/60 max-h-40 overflow-y-auto">
-                          {overallLeaderboard.slice(0, 5).map((entry) => (
+                        <ul className="divide-y divide-slate-800/60 max-h-64 overflow-y-auto">
+                          {overallLeaderboard.slice(0, 10).map((entry) => {
+                            const entryLvl = getPlayerLevelInfo(entry.powerScore);
+                            const isMe = username && entry.username === username;
+                            const rankBadge =
+                              entry.rank === 1 ? '🥇' : entry.rank === 2 ? '🥈' : entry.rank === 3 ? '🥉' : `#${entry.rank}`;
+                            const rankColor =
+                              entry.rank === 1
+                                ? 'text-[#FFB800] font-bold'
+                                : entry.rank === 2
+                                  ? 'text-slate-200 font-bold'
+                                  : entry.rank === 3
+                                    ? 'text-[#FB923C] font-bold'
+                                    : 'text-slate-500';
+                            return (
                             <li
                               key={`${entry.rank}-${entry.username}`}
-                              className="flex items-center justify-between gap-2 px-3 py-1.5 font-mono text-xs tabular-nums"
+                              className={`flex items-center justify-between gap-2 px-3 py-2 font-mono text-xs tabular-nums ${
+                                isMe
+                                  ? 'bg-[#00F0FF]/10 border-l-2 border-l-[#00F0FF]'
+                                  : entry.rank <= 3
+                                    ? 'bg-slate-900/40'
+                                    : ''
+                              }`}
                             >
-                              <div className="flex flex-col min-w-0">
-                                <span className="flex items-center gap-2 min-w-0">
-                                  <span className={entry.rank === 1 ? 'text-[#FFB800] font-bold w-4' : 'text-slate-500 w-4'}>
-                                    {entry.rank === 1 ? '👑' : `#${entry.rank}`}
-                                  </span>
-                                  <span className="text-slate-200 truncate">u/{entry.username}</span>
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span className={`${rankColor} w-6 text-center shrink-0`}>
+                                  {rankBadge}
                                 </span>
-                                {entry.pillars && (
-                                  <span className="text-[9px] text-slate-500 pl-6">
-                                    M:{entry.pillars.mobo ?? 0} · R:{entry.pillars.ram ?? 0} · S:{entry.pillars.ssd ?? 0} · G:{entry.pillars.gpu ?? 0} · C:{entry.pillars.cpu ?? 0}
-                                  </span>
-                                )}
+                                <span className={`truncate ${isMe ? 'text-[#00F0FF] font-semibold' : 'text-slate-200'}`}>
+                                  u/{entry.username}
+                                </span>
+                                <span className="px-1.5 py-0.5 rounded bg-slate-800/90 text-[9px] text-slate-300 shrink-0">
+                                  L{entryLvl.level}
+                                </span>
                               </div>
                               <span className="flex items-center gap-2 shrink-0">
                                 <span className="text-[#00F0FF] font-semibold">
@@ -4946,7 +4988,8 @@ export default function App() {
                                 )}
                               </span>
                             </li>
-                          ))}
+                            );
+                          })}
                         </ul>
                       )}
                     </div>
