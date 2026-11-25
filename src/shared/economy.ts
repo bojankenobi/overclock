@@ -91,8 +91,8 @@ export function computeRunRewards(params: {
   if (params.mode === 'overclock') {
     const score = Math.max(0, Math.floor(params.overclockScore ?? 0));
     return {
-      cycles: Math.max(15, Math.floor(score / 8)),
-      power: Math.floor(score / 4),
+      cycles: Math.min(250, Math.max(15, Math.floor(score / 8))),
+      power: Math.min(300, Math.floor(score / 4)),
     };
   }
 

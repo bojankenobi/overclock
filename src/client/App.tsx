@@ -4934,6 +4934,7 @@ export default function App() {
                           Play MOBO, RAM, SSD, GPU &amp; CPU to build your 5-Pillar Architect Score!
                         </p>
                       ) : (
+                        <>
                         <ul className="divide-y divide-slate-800/60 max-h-64 overflow-y-auto">
                           {overallLeaderboard.slice(0, 10).map((entry) => {
                             const entryLvl = getPlayerLevelInfo(entry.powerScore);
@@ -4993,6 +4994,29 @@ export default function App() {
                             );
                           })}
                         </ul>
+                        {username && !overallLeaderboard.slice(0, 10).some((e) => e.username === username) && (() => {
+                          const myEntry = overallLeaderboard.find((e) => e.username === username);
+                          const myLvl = getPlayerLevelInfo(myEntry?.powerScore ?? economy.powerScore);
+                          return (
+                            <div className="flex items-center justify-between gap-2 px-3 py-2 bg-[#00F0FF]/10 border-t border-[#00F0FF]/30 font-mono text-xs tabular-nums">
+                              <div className="flex items-center gap-2 min-w-0">
+                                <span className="text-[#00F0FF] font-bold w-6 text-center shrink-0">
+                                  {myEntry ? `#${myEntry.rank}` : 'YOU'}
+                                </span>
+                                <span className="text-[#00F0FF] font-semibold truncate">
+                                  u/{username}
+                                </span>
+                                <span className="px-1.5 py-0.5 rounded bg-slate-800/90 text-[9px] text-slate-300 shrink-0">
+                                  L{myLvl.level}
+                                </span>
+                              </div>
+                              <span className="text-[#00F0FF] font-semibold shrink-0">
+                                {myEntry?.powerScore ?? economy.powerScore} PTS
+                              </span>
+                            </div>
+                          );
+                        })()}
+                        </>
                       )}
                     </div>
                   ) : lbTab === 'challenge' ? (
