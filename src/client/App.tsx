@@ -2223,7 +2223,8 @@ export default function App() {
 
     const resize = () => {
       const rect = container.getBoundingClientRect();
-      const dpr = Math.min(window.devicePixelRatio || 1, 2);
+      const maxDpr = typeof navigator !== 'undefined' && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4 ? 1.5 : 2;
+      const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
       const w = Math.max(100, Math.floor(rect.width));
       const h = Math.max(100, Math.floor(rect.height));
       canvas.width = Math.floor(w * dpr);
@@ -2242,7 +2243,8 @@ export default function App() {
       if (!cpuRenderPausedRef.current) {
         const ctx = canvas.getContext('2d');
         if (ctx) {
-          const dpr = Math.min(window.devicePixelRatio || 1, 2);
+          const maxDpr = typeof navigator !== 'undefined' && navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4 ? 1.5 : 2;
+      const dpr = Math.min(window.devicePixelRatio || 1, maxDpr);
           const w = canvas.width / dpr;
           const h = canvas.height / dpr;
           ctx.save();
