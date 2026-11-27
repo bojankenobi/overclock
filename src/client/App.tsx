@@ -2850,21 +2850,14 @@ export default function App() {
                   {collectedNodeIndices.size}/{level.nodes.length}
                 </span>
               </div>
-              <span className="text-slate-700 hidden lg:inline" aria-hidden="true">
+              <span className="text-slate-700 hidden 2xl:inline" aria-hidden="true">
                 ·
               </span>
-              <div className="hidden lg:flex items-center gap-1.5" title="Missteps (undos & resets)">
+              <div className="hidden 2xl:flex items-center gap-1.5" title="Missteps (undos & resets)">
                 <span className="text-slate-500">ERR</span>
                 <span className={missteps === 0 ? 'text-[#00FF88] font-semibold' : 'text-[#FFB800] font-semibold'}>
                   {missteps}
                 </span>
-              </div>
-              <span className="text-slate-700 hidden lg:inline" aria-hidden="true">
-                ·
-              </span>
-              <div className="hidden lg:flex items-center gap-1.5">
-                <span className="text-slate-500">HINTS</span>
-                <span className="text-sky-200 font-semibold">{hints}</span>
               </div>
             </div>
           )}
@@ -2909,7 +2902,7 @@ export default function App() {
                 <span>{rngSalt > 0 ? `Phase #${rngSalt + 1}` : 'Next Phase'}</span>
               </button>
             )}
-            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#121722] border border-slate-800/80 font-mono text-xs text-slate-300 tabular-nums">
+            <div className="hidden xl:flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-[#121722] border border-slate-800/80 font-mono text-xs text-slate-300 tabular-nums">
               <span>{seedDate}</span>
               {dailyStats.totalSolves > 0 && (
                 <>
@@ -3064,7 +3057,7 @@ export default function App() {
             onClick={toggleMusic}
             aria-label={musicEnabled ? 'Mute cyber ambient synth' : 'Enable cyber ambient synth'}
             title={musicEnabled ? 'Tron Synth BGM active (click to mute)' : 'Tron Synth BGM muted (click to unmute)'}
-            className="hidden sm:inline-flex relative items-center justify-center w-8 h-8 rounded-md bg-[#121722] text-slate-300 border border-slate-800 hover:border-slate-600 hover:text-white transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/60"
+            className="hidden xl:inline-flex relative items-center justify-center w-8 h-8 rounded-md bg-[#121722] text-slate-300 border border-slate-800 hover:border-slate-600 hover:text-white transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/60"
           >
             <Music className={`w-3.5 h-3.5 ${musicEnabled ? 'text-[#00F0FF]' : 'text-slate-500'}`} />
             <span
@@ -3082,7 +3075,7 @@ export default function App() {
             onClick={toggleSound}
             aria-label={soundEnabled ? 'Mute sound' : 'Unmute sound'}
             title={soundEnabled ? 'Sound enabled (click to mute)' : 'Sound muted (click to unmute)'}
-            className="hidden sm:inline-flex relative items-center justify-center w-8 h-8 rounded-md bg-[#121722] text-slate-300 border border-slate-800 hover:border-slate-600 hover:text-white transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/60"
+            className="hidden xl:inline-flex relative items-center justify-center w-8 h-8 rounded-md bg-[#121722] text-slate-300 border border-slate-800 hover:border-slate-600 hover:text-white transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/60"
           >
             {soundEnabled ? (
               <Volume2 className="w-3.5 h-3.5" />
@@ -3105,7 +3098,7 @@ export default function App() {
             aria-label={sunlightMode ? 'Disable Sunlight Mode' : 'Enable Sunlight Mode'}
             aria-pressed={sunlightMode}
             title={sunlightMode ? 'Sunlight Mode active (tap for Dark Tron)' : 'Sunlight / Outdoor Mode (high-brightness board for direct sun)'}
-            className={`relative inline-flex items-center justify-center w-7 h-7 sm:w-8 sm:h-8 rounded-md border transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB800]/60 ${
+            className={`hidden xl:inline-flex relative items-center justify-center w-8 h-8 rounded-md border transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#FFB800]/60 ${
               sunlightMode
                 ? 'bg-[#2B220A] text-[#FFB800] border-[#FFB800]/60 shadow-[0_0_8px_rgba(255,184,0,0.3)]'
                 : 'bg-[#121722] text-slate-300 border-slate-800 hover:border-slate-600 hover:text-white'
@@ -3143,7 +3136,7 @@ export default function App() {
             aria-label="Keyboard controls"
             aria-expanded={showHelp}
             title="Keyboard controls (?)"
-            className={`hidden sm:inline-flex items-center justify-center w-8 h-8 rounded-md border transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/60 ${
+            className={`hidden xl:inline-flex items-center justify-center w-8 h-8 rounded-md border transition-colors shrink-0 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00F0FF]/60 ${
               showHelp
                 ? 'bg-[#1A2336] text-[#00F0FF] border-[#00F0FF]/50'
                 : 'bg-[#121722] text-slate-300 border-slate-800 hover:border-slate-600 hover:text-white'
