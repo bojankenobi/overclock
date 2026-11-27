@@ -274,7 +274,7 @@ function SplashApp() {
       {/* Top Row: Minimal Context + Streak / #1 */}
       <div className="relative z-10 flex items-center justify-between gap-2">
         <span className="font-mono text-[11px] font-semibold tracking-wider text-[#00FF88] uppercase">
-          {customPuzzle ? `Custom by u/${customPuzzle.creator}` : 'Daily Edition'}
+          {customPuzzle ? `Custom by u/${customPuzzle.creator}` : `Daily Edition · ${seedDate}`}
         </span>
 
         <div className="flex items-center gap-1.5 shrink-0">
